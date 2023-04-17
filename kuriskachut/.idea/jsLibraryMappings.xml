@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="PROJECT" libraries="{@popperjs/core, @swup, bootstrap, bootstrap-tagsinput, magic_mouse-1.2.1.cdn, select2, swup, tippy.js, twitter-bootstrap}" />
+  </component>
+</project>

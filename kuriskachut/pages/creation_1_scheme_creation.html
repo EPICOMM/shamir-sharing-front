@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Creation</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.6.0/bootstrap-tagsinput.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link rel="stylesheet" href="/styles/main_theme.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="/behaviour/logo_transformations.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+    <script defer src="https://unpkg.com/swup@3"></script>
+
+<body>
+<sdsad>
+    <div style="text-align: center; margin-bottom: 50px; margin-top: 350px; position: center;">
+        <img  id="logo-trans" src="/pictures/logo-transformed.png">
+        <img  id="logo" src="/pictures/logo.png">
+    </div>
+
+    <!--https://stackoverflow.com/questions/25651243/bootstrap-tags-input-not-working-with-lazyload-->
+    <!--<form  id="swup" class="transition-fade" style="text-align: center; position: center" >-->
+    <form  style="text-align: center; position: center" >
+        <div class="u-tagsinput lol">
+            <input id="tagsinput-creation-1" type="text" value="Саша, Петя, Илья, Алекс, Полина, Женя" data-role="tagsinput" placeholder="Add">
+        </div>
+        <input id="num-to-access" type="number" class="yellow-input" placeholder="Num of participants to access" min="1">
+        <a id="button-1-1" type="button" class="btn btn-lg btn-cross-trans" onclick="goToDistributionPage()"></a>
+    </form>
+
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+    <script src="/behaviour/serverRequests.js"></script>
+    <script src="/behaviour/elementsBehaviour.js"></script>
+    <script src="/behaviour/participants_behaviour.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.6.0/bootstrap-tagsinput.min.js"></script>
+    <!--<script src="/../../assets/vendor/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js"></script>-->
+    <!--<script src="../js/bootstrap-tagsinput.js"></script>-->
+</sdsad>
+</body>
+</html>
