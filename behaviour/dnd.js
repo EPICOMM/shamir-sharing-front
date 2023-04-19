@@ -1,5 +1,6 @@
 // dndField = document.getElementById("drop_zone");
-let txtFile = null;
+let rpkFile = null;
+let sssFile = null;
 let pdfFile = null;
 
 let dndPdfField = tippy('.dndField', {
@@ -9,13 +10,19 @@ let dndPdfField = tippy('.dndField', {
     trigger: "manual",
 })[0];
 
-dndPdfField.disable();
+// dndPdfField.disable();
 let checkPdf = false;
+let checkSss = false;
+let checkRpk = false;
+
 let file;
 
-function checkPdfMode(input){
-    checkPdf = input;
+function checkPdfMode(pdf, sss, rpk){
+    checkPdf = pdf;
+    checkSss = sss;
+    checkRpk = rpk;
 }
+
 
 function dropHandler(ev) {
     console.log("File(s) dropped" + ev.name);
@@ -30,7 +37,7 @@ function dropHandler(ev) {
             if (item.kind === "file") {
                 file = item.getAsFile();
                 console.log('Uploaded ' + file.type );
-                pdfTxtCheck(checkPdf);
+                pdfSssRpkCheck(checkPdf, checkSss, checkRpk);
                 console.log(`… file[${i}].name = ${file.name}`);
             }
         });
@@ -42,10 +49,10 @@ function dropHandler(ev) {
     }
 }
 
-function pdfTxtCheck(checkPdf){
+function pdfSssRpkCheck(checkPdf, checkSss, checkRpk){
     // file.type === 'text/plain
-    if (file.name.toString().length >= 4 && file.name.toString().slice(-4) === ".sss"){
-        txtFile = file;
+    if (checkSss && file.name.toString().length >= 4 && file.name.toString().slice(-4) === ".sss"){
+        sssFile = file;
         dndPdfField.setProps({
             content: 'Uploaded sss-file: ' + file.name,
         });
@@ -53,6 +60,11 @@ function pdfTxtCheck(checkPdf){
         pdfFile = file;
         dndPdfField.setProps({
             content: 'Uploaded pdf-file: ' + file.name,
+        });
+    } else if (checkRpk && file.name.toString().length >= 4 && file.name.toString().slice(-4) === ".rpk") {
+        rpkFile = file;
+        dndPdfField.setProps({
+            content: 'Uploaded rpk-file: ' + file.name,
         });
     } else {
         console.log( 'It is NOT validated!');
@@ -88,10 +100,6 @@ function pdfTxtCheck(checkPdf){
     //     dndPdfField[0].enable();
     //     dndPdfField[0].show();
     // }
-}
-
-function pdfAndTxtCheck() {
-
 }
 
 function dragOverHandler(ev) {

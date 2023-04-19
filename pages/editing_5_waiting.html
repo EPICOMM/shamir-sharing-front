@@ -16,45 +16,28 @@
     <script defer src="https://unpkg.com/swup@3"></script>
     <!--    <link rel="stylesheet" href="/../../assets/vendor/bootstrap-tagsinput/css/bootstrap-tagsinput.css">-->
 
-<body onload="checkPdfMode(false, true, false); getSigningRoom(); updateStatistics()">
-    <div style="text-align: center; margin-bottom: 50px; margin-top: 350px; position: center;">
-        <img  id="logo-trans" src="/pictures/logo-transformed.png">
-        <img  id="logo" src="/pictures/logo.png">
-    </div>
+<body>
+<div style="text-align: center; margin-bottom: 50px; margin-top: 350px; position: center;">
+    <img  id="logo-trans" src="/pictures/logo-transformed.png">
+    <img  id="logo" src="/pictures/logo.png">
+</div>
 
-    <!--https://stackoverflow.com/questions/25651243/bootstrap-tags-input-not-working-with-lazyload-->
-    <!--<form  id="swup" class="transition-fade" style="text-align: center; position: center" >-->
-    <form  style="text-align: center; position: center" >
+<!--https://stackoverflow.com/questions/25651243/bootstrap-tags-input-not-working-with-lazyload-->
+<!--<form  id="swup" class="transition-fade" style="text-align: center; position: center" >-->
+<form  style="text-align: center; position: center" >
 
-        <p class="scoreboard-title">Voted</p>
-        <p class="scoreboard-title"></p>
-        <p class="scoreboard-title">Total</p>
-        <br>
-        <div id="voted" type="button" class="btn btn-lg scoreboard"></div>
-        <a id="required" type="button" class="btn btn-lg scoreboard"></a>
-        <a id="total" type="button" class="btn btn-lg scoreboard"></a>
+    <p class="scoreboard-title">Voted</p>
+    <p class="scoreboard-title">Required</p>
+    <p class="scoreboard-title">Total</p>
+    <br>
+    <div id="voted" type="button" class="btn btn-lg scoreboard">5</div>
+    <a id="required" type="button" class="btn btn-lg scoreboard">7</a>
+    <a id="total" type="button" class="btn btn-lg scoreboard">9</a>
+    <a id="button-1-1" type="button" class="btn btn-lg" onclick="updateStatistics()">Update</a>
 
+</form>
 
-<!--        <a type="button" class="btn btn-lg" href="http://www.physics.uni-altai.ru/media/get.php?id=488" target="_blank">Download document</a>-->
-
-        <a type="button" class="btn btn-lg" target="_blank" onclick="downloadDocument()">Download document</a>
-
-        <div
-                ondrop="dropHandler(event);"
-                class="dndField upload-secret-share-field"
-                ondragover="dragOverHandler(event);">
-            <img src="/pictures/upload_secret_share.png" style="width: 120px; margin-top: 30px">
-        </div>
-
-        <a type="button" class="btn btn-lg" onclick="putSignature()">Sign</a>
-
-        <a type="button" class="btn btn-lg btn-cross-trans" onclick="goToWaitingRoom()"></a>
-
-    </form>
-
-    <script src="/behaviour/serverRequests.js"></script>
-
-    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
 <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
 <script src="/behaviour/elementsBehaviour.js"></script>
 <script src="/behaviour/dnd.js"></script>

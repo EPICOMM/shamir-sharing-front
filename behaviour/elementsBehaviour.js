@@ -5,6 +5,12 @@ let links;
 let participants;
 let numToAccess;
 let secretShares;
+let sign_room_id;
+let creator_token;
+let signed_count;
+let participants_count;
+let enough_participants;
+let original_download_link;
 
 let tagsInputTip = tippy('#button-1-1', {
     placement: 'right',
@@ -24,8 +30,10 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-function downloadPublicKeyByButton() {
-    downloadAsFile(public_key, "public_key.sss");
+async function downloadPublicKeyByButton() {
+    console.log(room_id);
+    // downloadAsFile(JSON.stringify(public_key), "public_key.sss");
+    await downloadPublicKey();
 }
 
 function downloadAsFile(data, fileName) {
@@ -46,17 +54,20 @@ $(document).ready(function (e) {
         console.log(links);
         console.log(name + links["'" + name + "'"]);
         // downloadSecretShare(links['a'], room_id);
-        downloadAsFile(links[nameKey], "private_key_" + name + ".sss");
+        // downloadAsFile(links[nameKey], "private_key_" + name + ".sss");
     });
 
-    tagsinput.on('itemRemoved', function (event) {
+    tagsinput.on('itemRemoved', async function (event) {
         let name = event.item;
+        console.log("AAAAA" + name);
+        await downloadSecretShare(name);
+
         console.log(name + " itemRemoved");
         console.log("\'" + name + "\'");
-        console.log(Object.keys(secretShares));
-        delete secretShares["\"" + name + "\""];
-        console.log(Object.keys(secretShares));
-        localStorage.setItem("secretShares", secretShares);
+        console.log(Object.keys(links));
+        delete links["\"" + name + "\""];
+        console.log(Object.keys(links));
+        localStorage.setItem("links", links);
     });
 
     tagsinput.on('itemAdded', function (event) {
@@ -85,30 +96,34 @@ function checkSchemeSettingsCorrectness() {
 }
 
 function createScheme() {
-    createSecretRoom("threshold", participants, numToAccess, "");
+    // "threshold", participants, numToAccess, ""
+    // new Promise(function (resolve) {
+    //     createSecretRoom();
+    //     resolve(true);
+    // }).then(function (value) {
+    //     console.log("asd");
+    //     localStorage.setItem('room_id', room_id);
+    //     localStorage.setItem('public_key', public_key);
+    //     return true;
+    // });
+    // console.log("sdf");
+    return true;
     // localStorage.setItem('participants', participants);
     // localStorage.setItem('numToAccess', numToAccess);
-    localStorage.setItem('room_id', room_id);
-    localStorage.setItem('public_key', public_key);
-    return true;
 }
 
 function goToSettingPage() {
-    console.log(txtFile);
-    if (txtFile != null) {
-        window.location = "../pages/creation_1_scheme_creation.html";
+    console.log(sssFile);
+    if (sssFile != null) {
+        window.location = "../pages/editing_2_settings.html";
     } else {
         showNewTipContent(dndPdfField, 'Загрузите sss-файл');
     }
 }
 
-function goToDistributionPage() {
-    localStorage.removeItem("secretShares");
+async function goToDistributionPage() {
 
     if (!checkSchemeSettingsCorrectness()) {
-        return 0;
-    }
-    if (!createScheme()) {
         return 0;
     }
     totalFadeToggle();
@@ -118,24 +133,15 @@ function goToDistributionPage() {
     // localStorage.setItem('room_id', room_id);
     // localStorage.setItem('public_key', public_key);
 
-    window.location = "http://localhost:63342/kuriskachut/pages/creation_2_scheme_distribution.html?_ijt=jnellqsr26j7e47aq3b37a06o6&_ij_reload=RELOAD_ON_SAVE";
+    await createSecretRoom();
 
-    if (!getRoomInfo()) {
-        return 0;
-    }
+    window.location = "http://localhost:63342/kuriskachut/pages/creation_2_scheme_distribution.html?_ijt=jnellqsr26j7e47aq3b37a06o6&_ij_reload=RELOAD_ON_SAVE";
 
     // localStorage.setItem('links', JSON.stringify(links));
     // console.log("liiiinks" + JSON.stringify(links));
 
     // console.log("goToDistributionPage -------" + links['a']);
-    showParticipants();
-}
-
-
-function getRoomInfo() {
-    getSecretRoom();
-    console.log(links);
-    return true;
+    // showParticipants();
 }
 
 function copyRoomLink() {
@@ -151,9 +157,14 @@ function copyRoomLink() {
         });
 }
 
-function copySigningRoomLink() {
-    let text = "http://localhost:63342/kuriskachut/pages/signing_2_signing.html?_ijt=k92c64ifoojmkul97kej0eeugm&_ij_reload=RELOAD_ON_SAVE" +
-        "&room_id=" + room_id;
+function copySigningRoomLink(schemeEditFlow) {
+    let text;
+    if (schemeEditFlow)
+        text = "http://localhost:63342/kuriskachut/pages/editing_4_signing.html?" +
+            "room_id=" + sign_room_id;
+    else
+        text = "http://localhost:63342/kuriskachut/pages/signing_2_signing.html?" +
+            "&room_id=" + sign_room_id;
 
     navigator.clipboard.writeText(text)
         .then(() => {
@@ -184,15 +195,23 @@ function totalFadeToggle() {
 
 function showParticipants() {
 
-    console.log(localStorage.getItem("participants"));
+    // console.log(localStorage.getItem("participants"));
+
     // !!!
     // numToAccess = localStorage['numToAccess'];
     // public_key = localStorage['public_key'];
     // links = JSON.parse(localStorage['links']);
-
-    for (let i = 0; i < secretShares.length; i++) {
-        $('#tagsinput-creation-2').tagsinput('add', secretShares[i]);
+    console.log("AAAAAAAAAAAAAAAAa" + links['Саша']);
+    for (const [key, value] of Object.entries(links)) {
+        console.log(`${key} --- ${value}`);
+        if (value !== "null") {
+            $('#tagsinput-creation-2').tagsinput('add', key.replace(/'/g, ""));
+        }
     }
+    for (let i = 0; i < links.length; i++) {
+        $('#tagsinput-creation-2').tagsinput('add', "1");
+    }
+
     $('input[type=text]').prop("readonly", true);
 
     // $('#num-to-access-2').text("Access number: " + numToAccess);
@@ -210,9 +229,9 @@ function showNewTipContent(field, content) {
     field.show();
 }
 
-function goToTheSigningRoom() {
-    console.log(txtFile);
-    if (txtFile === null) {
+async function goToTheSigningRoom() {
+    console.log(sssFile);
+    if (sssFile === null) {
         showNewTipContent(dndPdfField, 'Загрузите sss-файл');
         return 0;
     }
@@ -221,19 +240,21 @@ function goToTheSigningRoom() {
         return 0;
     }
 
-    window.location = "http://localhost:63342/kuriskachut/pages/signing_1_distribution_and_stop.html?_ijt=8l6crcbe3dk8b329nccqsv08p4&_ij_reload=RELOAD_ON_SAVE";
-    downloadAsFile(public_key, "creator-token.sss");
+    await createSigningRoom();
+
+    window.location = "http://localhost:63342/kuriskachut/pages/signing_1_distribution_and_stop.html?room_id="+sign_room_id + "&creator_token=" + creator_token;
+    // downloadAsFile(public_key, "creator-token.sss");
 }
 
 // var request = require('request');
 // var smsService = {}
 
 
-function prepareForVerificAndVerific() {
-    console.log(txtFile);
+async function prepareForVerificAndVerific() {
+    console.log(rpkFile);
     let mess = "";
-    if (txtFile === null) {
-        mess += 'Загрузите sss-файл \n';
+    if (rpkFile === null) {
+        mess += 'Загрузите rpk-файл \n';
     }
 
     if (pdfFile === null) {
@@ -244,15 +265,16 @@ function prepareForVerificAndVerific() {
         showNewTipContent(dndPdfField, mess);
         return 0;
     }
-    console.log(verifySignature());
-    illustrateVerdict(verifySignature());
+    // console.log(verifySignature());
+    let verdict = await verifySignature();
+    illustrateVerdict(verdict);
 }
 
 function illustrateVerdict(ans) {
     verdict.style.visibility = "visible";
     dndPdfField.hide();
-
-    if (ans === true) {
+    console.log(ans);
+    if (ans === false) {
         verdict.style.color = "#ff2e40";
         verdict.textContent = "The Document Is Not Signed :(";
     } else {
@@ -261,27 +283,28 @@ function illustrateVerdict(ans) {
     }
 }
 
-function creationRoomPrep() {
-    const queryString = window.location.search;
-    console.log(queryString);
-    const urlParams = new URLSearchParams(queryString);
-    room_id = urlParams.get('room_id');
-    console.log(room_id);
-    if (room_id === null) {
-        room_id = localStorage.getItem("room_id");
-    }
-    console.log("creationRoomPrep, room_id=" + room_id);
-    getRoomInfo(room_id, public_key);
+async function creationRoomPrep() {
+    await getSecretRoom();
+    // const queryString = window.location.search;
+    // console.log(queryString);
+    // const urlParams = new URLSearchParams(queryString);
+    // room_id = urlParams.get('room_id');
+    // console.log(room_id);
+    // if (room_id === null) {
+    //     room_id = localStorage.getItem("room_id");
+    // }
+    // console.log("creationRoomPrep, room_id=" + room_id);
+    // getRoomInfo(room_id, public_key);
     showParticipants();
 }
 
 let voted = 5;
 let required = 5;
 
-function stopSignification() {
+function stopSignification(schemeFlow) {
 
     let mess = "";
-    if (txtFile === null) {
+    if (sssFile === null) {
         mess += "Загрузите токен креатора \n";
     }
 
@@ -302,14 +325,16 @@ function downloadSignedDocumentButton() {
     downloadAsFile(public_key, "signed_document.pdf");
 }
 
-function downloadDocument() {
-    downloadAsFile(public_key, "document.pdf");
+async function downloadDocument() {
+    // downloadAsFile(public_key, "document.pdf");
+    // original_download_link
+    await downloadOriginalDocument();
 }
 
 let isDocSigned = false;
 
-function putSignature() {
-    if (txtFile != null) {
+async function putSignature() {
+    if (sssFile != null && await signDocument()) {
         showNewTipContent(dndPdfField, 'Документ подписан');
         isDocSigned = true;
     } else {
@@ -319,7 +344,7 @@ function putSignature() {
 
 function goToWaitingRoom() {
     if (isDocSigned) {
-        window.location = "http://localhost:63342/kuriskachut/pages/signing_3_waiting.html?_ijt=d087g5m3svt8g0lrql2tb5amul&_ij_reload=RELOAD_ON_SAVE";
+        window.location = "http://localhost:63342/kuriskachut/pages/signing_3_waiting.html?room_id="+sign_room_id;
     } else {
         showNewTipContent(dndPdfField, 'Подпишите документ');
     }
@@ -328,11 +353,21 @@ function goToWaitingRoom() {
 let votedEl = document.getElementById("voted");
 let requiredEl = document.getElementById("required");
 let totalEl = document.getElementById("total");
+let stopBttn = document.getElementById("stop-button");
 
-function updateStatistics(){
-    votedEl.textContent = ++votedEl.textContent;
-
-    if (votedEl.textContent >= requiredEl.textContent){
-        window.location = "http://localhost:63342/kuriskachut/pages/signing_5_download.html?_ijt=f7pp3sngvv9jbmn7c7b6cfusbe&_ij_reload=RELOAD_ON_SAVE";
+async function updateStatistics() {
+    console.log("aaaaaaaaaaa");
+    await getSigningRoom();
+    votedEl.textContent = signed_count.toString();
+    totalEl.textContent = participants_count.toString();
+    if (enough_participants){
+        stopBttn.style.visibility = "visible";
     }
+    console.log("rrrrrrrrrr");
+    //
+    // votedEl.textContent = ++votedEl.textContent;
+    //
+    // if (votedEl.textContent >= requiredEl.textContent) {
+    //     window.location = "http://localhost:63342/kuriskachut/pages/signing_5_download.html?_ijt=f7pp3sngvv9jbmn7c7b6cfusbe&_ij_reload=RELOAD_ON_SAVE";
+    // }
 }

@@ -16,7 +16,7 @@
     <script defer src="https://unpkg.com/swup@3"></script>
     <!--    <link rel="stylesheet" href="/../../assets/vendor/bootstrap-tagsinput/css/bootstrap-tagsinput.css">-->
 
-<body onload="checkPdfMode(true)">
+<body onload="checkPdfMode(true, true, false)">
 <div style="text-align: center; margin-bottom: 50px; margin-top: 350px; position: center;">
     <img  id="logo-trans" src="/pictures/logo-transformed.png">
     <img  id="logo" src="/pictures/logo.png">
@@ -30,13 +30,22 @@
             ondrop="dropHandler(event);"
             class="dndField"
             ondragover="dragOverHandler(event);">
-        <img src="/pictures/upload_pdf_publicKey.png" style="width: 150px; margin-top: 85px">
+        <img src="/pictures/upload_pdf_sss.png" style="width: 150px; margin-top: 85px">
     </div>
+
+<!--    <a type="button" class="btn btn-lg" onclick="createSigningRoom()">createSigningRoom</a>-->
+    <a type="button" class="btn btn-lg" onclick="getSigningRoom()">getSigningRoom</a>
+    <a type="button" class="btn btn-lg" onclick="signDocument()">signDocument</a>
+    <a type="button" class="btn btn-lg" onclick="finishSigning()">finishSigning</a>
+
     <a type="button" class="btn btn-lg btn-cross-trans" onclick="goToTheSigningRoom()"></a>
 
 <!--    <p id="verdict" class="verdict-sign-check verdict-positive">The Document Is Signed :)</p>-->
 
 </form>
+
+<script src="/behaviour/serverRequests.js"></script>
+
 
 <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
 <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
