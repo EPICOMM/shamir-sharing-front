@@ -154,7 +154,7 @@ async function goToEditDistributionPage(){
 }
 
 function copyRoomLink() {
-    let text = "/pages/creation_2_scheme_distribution.html?_ijt=jnellqsr26j7e47aq3b37a06o6&_ij_reload=RELOAD_ON_SAVE" +
+    let text = "https://secs.sldr.xyz/pages/creation_2_scheme_distribution.html?_ijt=jnellqsr26j7e47aq3b37a06o6&_ij_reload=RELOAD_ON_SAVE" +
         "&room_id=" + room_id;
 
     navigator.clipboard.writeText(text)
@@ -169,10 +169,10 @@ function copyRoomLink() {
 function copySigningRoomLink(schemeEditFlow) {
     let text;
     if (schemeEditFlow)
-        text = "/pages/editing_4_signing.html?" +
+        text = "https://secs.sldr.xyz/pages/editing_4_signing.html?" +
             "room_id=" + sign_room_id;
     else
-        text = "/pages/signing_2_signing.html?" +
+        text = "https://secs.sldr.xyz/pages/signing_2_signing.html?" +
             "&room_id=" + sign_room_id;
 
     navigator.clipboard.writeText(text)
