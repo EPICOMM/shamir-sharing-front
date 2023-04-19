@@ -142,7 +142,7 @@ async function goToDistributionPage() {
 
     await createSecretRoom();
 
-    window.location = "/kuriskachut/pages/creation_2_scheme_distribution.html?room_id="+room_id;
+    window.location = "/pages/creation_2_scheme_distribution.html?room_id="+room_id;
 }
 
 
@@ -150,11 +150,11 @@ async function goToEditDistributionPage(){
     sssFile = localStorage.getItem("sssFile");
     console.log(sssFile + "sadfadffsfdsfsdfdfd");
     await createSecretReissueRoom();
-    window.location = "/kuriskachut/pages/editing_3_distribution_and_stop.html?room_id="+room_id;
+    window.location = "/pages/editing_3_distribution_and_stop.html?room_id="+room_id;
 }
 
 function copyRoomLink() {
-    let text = "/kuriskachut/pages/creation_2_scheme_distribution.html?_ijt=jnellqsr26j7e47aq3b37a06o6&_ij_reload=RELOAD_ON_SAVE" +
+    let text = "/pages/creation_2_scheme_distribution.html?_ijt=jnellqsr26j7e47aq3b37a06o6&_ij_reload=RELOAD_ON_SAVE" +
         "&room_id=" + room_id;
 
     navigator.clipboard.writeText(text)
@@ -169,10 +169,10 @@ function copyRoomLink() {
 function copySigningRoomLink(schemeEditFlow) {
     let text;
     if (schemeEditFlow)
-        text = "/kuriskachut/pages/editing_4_signing.html?" +
+        text = "/pages/editing_4_signing.html?" +
             "room_id=" + sign_room_id;
     else
-        text = "/kuriskachut/pages/signing_2_signing.html?" +
+        text = "/pages/signing_2_signing.html?" +
             "&room_id=" + sign_room_id;
 
     navigator.clipboard.writeText(text)
@@ -192,7 +192,7 @@ function displayNone() {
 }
 
 function lol() {
-    window.location = "/kuriskachut/pages/creation_2_scheme_distribution.html?_ijt=jnellqsr26j7e47aq3b37a06o6&_ij_reload=RELOAD_ON_SAVE"
+    window.location = "/pages/creation_2_scheme_distribution.html?_ijt=jnellqsr26j7e47aq3b37a06o6&_ij_reload=RELOAD_ON_SAVE"
 }
 
 function totalFadeToggle() {
@@ -229,7 +229,7 @@ function showParticipants() {
 }
 
 function goToMainMenu() {
-    window.location = "/kuriskachut/index.html?_ijt=a6rtica3t5cllaba34navotobc&_ij_reload=RELOAD_ON_SAVE\n"
+    window.location = "/index.html?_ijt=a6rtica3t5cllaba34navotobc&_ij_reload=RELOAD_ON_SAVE\n"
 }
 
 function showNewTipContent(field, content) {
@@ -253,7 +253,7 @@ async function goToTheSigningRoom() {
 
     await createSigningRoom();
 
-    window.location = "/kuriskachut/pages/signing_1_distribution_and_stop.html?room_id=" + sign_room_id + "&creator_token=" + creator_token;
+    window.location = "/pages/signing_1_distribution_and_stop.html?room_id=" + sign_room_id + "&creator_token=" + creator_token;
     // downloadAsFile(public_key, "creator-token.sss");
 }
 
@@ -324,7 +324,7 @@ async function stopSignification() {
     }
     stopButtonTips.hide();
     signingStoped = true;
-    window.location = ("/kuriskachut/pages/signing_5_download.html?room_id=" + sign_room_id);
+    window.location = ("/pages/signing_5_download.html?room_id=" + sign_room_id);
 }
 
 async function downloadSignedDocumentButton() {
@@ -351,7 +351,7 @@ async function putSignature() {
 
 function goToWaitingRoom() {
     if (isDocSigned) {
-        window.location = "/kuriskachut/pages/signing_3_waiting.html?room_id=" + sign_room_id;
+        window.location = "/pages/signing_3_waiting.html?room_id=" + sign_room_id;
     } else {
         showNewTipContent(dndPdfField, 'Подпишите документ');
     }
@@ -378,14 +378,14 @@ async function updateStatistics() {
         votedEl.textContent = signed_count.toString();
         totalEl.textContent = participants_count.toString();
         // if (enough_participants) {
-        //     window.location = "http://localhost:63342/kuriskachut/pages/signing_5_download.html?_ijt=f7pp3sngvv9jbmn7c7b6cfusbe&_ij_reload=RELOAD_ON_SAVE";
+        //     window.location = "http://localhost:63342/pages/signing_5_download.html?_ijt=f7pp3sngvv9jbmn7c7b6cfusbe&_ij_reload=RELOAD_ON_SAVE";
         // }
     }
     if (xvotedEl !== null && xtotalEl !== null) {
         xvotedEl.textContent = signed_count.toString();
         xtotalEl.textContent = participants_count.toString();
         // if (enough_participants) {
-        //     window.location = "http://localhost:63342/kuriskachut/pages/signing_5_download.html?_ijt=f7pp3sngvv9jbmn7c7b6cfusbe&_ij_reload=RELOAD_ON_SAVE";
+        //     window.location = "http://localhost:63342/pages/signing_5_download.html?_ijt=f7pp3sngvv9jbmn7c7b6cfusbe&_ij_reload=RELOAD_ON_SAVE";
         // }
     }
     console.log(ftotalEl + " ----------" + fvotedEl);
@@ -393,7 +393,7 @@ async function updateStatistics() {
         fvotedEl.textContent = signed_count.toString();
         ftotalEl.textContent = participants_count.toString();
         if (enough_participants) {
-            window.location = ("/kuriskachut/pages/signing_5_download.html?room_id=" + sign_room_id);
+            window.location = ("/pages/signing_5_download.html?room_id=" + sign_room_id);
         }
         // if (enough_participants) {
         // }
