@@ -5,7 +5,7 @@ async function createSecretRoom() {
     // return true;
     console.log("!!!!!!");
     console.log(participants);
-    const rawResponse = await fetch('http://localhost:8080/createSecretRoom', {
+    const rawResponse = await fetch('/api/createSecretRoom', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -31,7 +31,7 @@ async function getSecretRoom() {
     room_id = localStorage.getItem("room_id");
     creator_token = localStorage.getItem("creator_token");
     console.log("AAAAAAA getSecretRoom " + creator_token);
-    const rawResponse = await fetch('http://localhost:8080/getSecretRoom?room_id=' + room_id, {
+    const rawResponse = await fetch('/api/getSecretRoom?room_id=' + room_id, {
         method: 'GET'
     })
 
@@ -55,7 +55,7 @@ async function downloadPublicKey() {
     // console.log(ans);
 
     var link = document.createElement('a');
-    link.setAttribute('href', 'http://localhost:8080/downloadPublicKey/' + room_id);
+    link.setAttribute('href', '/api/downloadPublicKey/' + room_id);
     link.setAttribute('download', "public-key.sss");
     link.setAttribute('target','_blank');
     link.style.display = 'none';
@@ -67,7 +67,7 @@ async function downloadPublicKey() {
 async function downloadSecretShare(name) {
 
     var link = document.createElement('a');
-    link.setAttribute('href', 'http://localhost:8080' + links[`'${name}'`]);
+    link.setAttribute('href', '/api' + links[`'${name}'`]);
     link.setAttribute('download', "secret-share.sss");
     link.setAttribute('target','_blank');
     link.style.display = 'none';
@@ -81,7 +81,7 @@ async function createSigningRoom() {
     formData.append('pdf1', pdfFile);
     formData.append('pdf2', sssFile);
 
-    const rawResponse = await fetch('http://localhost:8080/createSigningRoom', {
+    const rawResponse = await fetch('/api/createSigningRoom', {
         method: 'POST',
         body: formData,
     })
@@ -102,7 +102,7 @@ async function getSigningRoom() {
     let urlParams = new URLSearchParams(queryString);
     sign_room_id = urlParams.get('room_id')
     console.log(sign_room_id);
-    const rawResponse = await fetch('http://localhost:8080/getSigningRoom?room_id=' + sign_room_id, {
+    const rawResponse = await fetch('/api/getSigningRoom?room_id=' + sign_room_id, {
         method: 'GET'
     })
 
@@ -132,7 +132,7 @@ async function downloadOriginalDocument() {
     // console.log(ans);
     console.log("aADSDSF"+sign_room_id);
     var link = document.createElement('a');
-    link.setAttribute('href', 'http://localhost:8080/downloadOriginalDocument/' + sign_room_id);
+    link.setAttribute('href', '/api/downloadOriginalDocument/' + sign_room_id);
     link.setAttribute('download', "original-doc.pdf");
     link.setAttribute('target','_blank');
     link.style.display = 'none';
@@ -151,7 +151,7 @@ async function downloadOriginalDocument() {
 async function signDocument() {
     console.log("!!!!");
 
-    const rawResponse = await fetch('http://localhost:8080/signDocument?room_id='+sign_room_id, {
+    const rawResponse = await fetch('/api/signDocument?room_id='+sign_room_id, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/octet-stream'
@@ -177,7 +177,7 @@ async function finishSigning() {
     console.log(creator_token);
     console.log("!!!!");
 
-    const rawResponse = await fetch('http://localhost:8080/finishSigning?room_id='+sign_room_id+"&creator_token="+ creator_token, {
+    const rawResponse = await fetch('/api/finishSigning?room_id='+sign_room_id+"&creator_token="+ creator_token, {
         method: 'POST'
     })
     let ans = await rawResponse;
@@ -198,7 +198,7 @@ function downloadSignedDocument() {
     console.log(sign_room_id);
     console.log("aADSDSF"+sign_room_id);
     var link = document.createElement('a');
-    link.setAttribute('href', 'http://localhost:8080/downloadSignedDocument/' + sign_room_id);
+    link.setAttribute('href', '/api/downloadSignedDocument/' + sign_room_id);
     link.setAttribute('download', "original-doc.pdf");
     link.setAttribute('target','_blank');
     link.style.display = 'none';
@@ -232,7 +232,7 @@ async function createSecretReissueRoom() {
     //     })
     // })
 
-    const rawResponse = await fetch('http://localhost:8080/createSecretReissueRoom?formula=T2(a,b,c,d,e,f,g)', {
+    const rawResponse = await fetch('createSecretReissueRoom?formula=T2(a,b,c,d,e,f,g)', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/octet-stream'
@@ -259,7 +259,7 @@ async function getSecretReissueRoom(room_id) {
     editing_room_id = localStorage.getItem("editing_room_id");
     console.log("AAAAAAA getSecretRoom " + editing_room_id);
 
-    const rawResponse = await fetch('http://localhost:8080/getSecretReissueRoom?room_id=' + editing_room_id, {
+    const rawResponse = await fetch('/api/getSecretReissueRoom?room_id=' + editing_room_id, {
         method: 'GET'
     })
 
@@ -306,7 +306,7 @@ async function verifySignature() {
     formData.append('pdf1', pdfFile);
     formData.append('pdf2', rpkFile);
 
-    const rawResponse = await fetch('http://localhost:8080/verifySignature', {
+    const rawResponse = await fetch('/api/verifySignature', {
         method: 'POST',
         body: formData,
     })
