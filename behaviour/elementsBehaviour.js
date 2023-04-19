@@ -11,6 +11,9 @@ let signed_count;
 let participants_count;
 let enough_participants;
 let original_download_link;
+let editing_room_id;
+let room_status;
+let signingStoped;
 
 let tagsInputTip = tippy('#button-1-1', {
     placement: 'right',
@@ -112,10 +115,14 @@ function createScheme() {
     // localStorage.setItem('numToAccess', numToAccess);
 }
 
-function goToSettingPage() {
+async function goToSettingPage() {
+    localStorage.setItem('sssFile', sssFile);
+
     console.log(sssFile);
     if (sssFile != null) {
-        window.location = "../pages/editing_2_settings.html";
+        await getSecretRoom();
+
+        window.location = "../pages/editing_2_settings.html?room_id=" + room_id;
     } else {
         showNewTipContent(dndPdfField, 'Загрузите sss-файл');
     }
@@ -135,13 +142,15 @@ async function goToDistributionPage() {
 
     await createSecretRoom();
 
-    window.location = "http://localhost:63342/kuriskachut/pages/creation_2_scheme_distribution.html?_ijt=jnellqsr26j7e47aq3b37a06o6&_ij_reload=RELOAD_ON_SAVE";
+    window.location = "http://localhost:63342/kuriskachut/pages/creation_2_scheme_distribution.html?room_id="+room_id;
+}
 
-    // localStorage.setItem('links', JSON.stringify(links));
-    // console.log("liiiinks" + JSON.stringify(links));
 
-    // console.log("goToDistributionPage -------" + links['a']);
-    // showParticipants();
+async function goToEditDistributionPage(){
+    sssFile = localStorage.getItem("sssFile");
+    console.log(sssFile + "sadfadffsfdsfsdfdfd");
+    await createSecretReissueRoom();
+    window.location = "http://localhost:63342/kuriskachut/pages/editing_3_distribution_and_stop.html?room_id="+room_id;
 }
 
 function copyRoomLink() {
@@ -201,18 +210,20 @@ function showParticipants() {
     // numToAccess = localStorage['numToAccess'];
     // public_key = localStorage['public_key'];
     // links = JSON.parse(localStorage['links']);
-    console.log("AAAAAAAAAAAAAAAAa" + links['Саша']);
-    for (const [key, value] of Object.entries(links)) {
-        console.log(`${key} --- ${value}`);
-        if (value !== "null") {
-            $('#tagsinput-creation-2').tagsinput('add', key.replace(/'/g, ""));
-        }
-    }
-    for (let i = 0; i < links.length; i++) {
-        $('#tagsinput-creation-2').tagsinput('add', "1");
-    }
+    console.log("AAAAAAAAAAAAAAAAa" + links);
+    $("#tagsinput-creation-2").tagsinput('removeAll');
 
-    $('input[type=text]').prop("readonly", true);
+    for (const [key, value] of Object.entries(links)) {
+        console.log(`${key} +--- ${value}`);
+
+        $('#tagsinput-creation-2').tagsinput('add', key.replace(/'/g, ""));
+
+    }
+    // for (let i = 0; i < links.length; i++) {
+    //     $('#tagsinput-creation-2').tagsinput('add', "1");
+    // }
+
+    // $('input[type=text]').prop("readonly", true);
 
     // $('#num-to-access-2').text("Access number: " + numToAccess);
 }
@@ -242,7 +253,7 @@ async function goToTheSigningRoom() {
 
     await createSigningRoom();
 
-    window.location = "http://localhost:63342/kuriskachut/pages/signing_1_distribution_and_stop.html?room_id="+sign_room_id + "&creator_token=" + creator_token;
+    window.location = "http://localhost:63342/kuriskachut/pages/signing_1_distribution_and_stop.html?room_id=" + sign_room_id + "&creator_token=" + creator_token;
     // downloadAsFile(public_key, "creator-token.sss");
 }
 
@@ -252,6 +263,7 @@ async function goToTheSigningRoom() {
 
 async function prepareForVerificAndVerific() {
     console.log(rpkFile);
+    console.log(pdfFile);
     let mess = "";
     if (rpkFile === null) {
         mess += 'Загрузите rpk-файл \n';
@@ -285,44 +297,39 @@ function illustrateVerdict(ans) {
 
 async function creationRoomPrep() {
     await getSecretRoom();
-    // const queryString = window.location.search;
-    // console.log(queryString);
-    // const urlParams = new URLSearchParams(queryString);
-    // room_id = urlParams.get('room_id');
-    // console.log(room_id);
-    // if (room_id === null) {
-    //     room_id = localStorage.getItem("room_id");
-    // }
-    // console.log("creationRoomPrep, room_id=" + room_id);
-    // getRoomInfo(room_id, public_key);
     showParticipants();
 }
+
+async function editingRoomPrep() {
+    await getSecretRoom();
+    showParticipants();
+}
+
 
 let voted = 5;
 let required = 5;
 
-function stopSignification(schemeFlow) {
-
-    let mess = "";
-    if (sssFile === null) {
-        mess += "Загрузите токен креатора \n";
-    }
-
-    if (voted < required) {
-        mess += "Недостаточно голосов";
-    }
-
-    if (mess !== "") {
-        showNewTipContent(stopButtonTips, mess);
-        return 0;
-    }
-
-    stopButtonTips.hide();
-    window.location = "http://localhost:63342/kuriskachut/pages/signing_5_download.html?_ijt=f7pp3sngvv9jbmn7c7b6cfusbe&_ij_reload=RELOAD_ON_SAVE";
+async function updateAndStop() {
+    await getSigningRoom();
+    await stopSignification();
 }
 
-function downloadSignedDocumentButton() {
-    downloadAsFile(public_key, "signed_document.pdf");
+async function stopSignification() {
+    console.log("ASDDSFDSFDSF" + enough_participants);
+    if (enough_participants) {
+        await finishSigning();
+    } else {
+        showNewTipContent(stopButtonTips, "Недостаточно голосов");
+        return 0;
+    }
+    stopButtonTips.hide();
+    signingStoped = true;
+    window.location = ("http://localhost:63342/kuriskachut/pages/signing_5_download.html?room_id=" + sign_room_id);
+}
+
+async function downloadSignedDocumentButton() {
+    // downloadAsFile(public_key, "signed_document.pdf");
+    await downloadSignedDocument();
 }
 
 async function downloadDocument() {
@@ -344,7 +351,7 @@ async function putSignature() {
 
 function goToWaitingRoom() {
     if (isDocSigned) {
-        window.location = "http://localhost:63342/kuriskachut/pages/signing_3_waiting.html?room_id="+sign_room_id;
+        window.location = "http://localhost:63342/kuriskachut/pages/signing_3_waiting.html?room_id=" + sign_room_id;
     } else {
         showNewTipContent(dndPdfField, 'Подпишите документ');
     }
@@ -354,20 +361,63 @@ let votedEl = document.getElementById("voted");
 let requiredEl = document.getElementById("required");
 let totalEl = document.getElementById("total");
 let stopBttn = document.getElementById("stop-button");
+let stopBttn2 = document.getElementById("stop-button-2");
+
+let xvotedEl = document.getElementById("voted-x");
+let xtotalEl = document.getElementById("total-x");
+let fvotedEl = document.getElementById("voted-f");
+let ftotalEl = document.getElementById("total-f");
 
 async function updateStatistics() {
-    console.log("aaaaaaaaaaa");
+    console.log(ftotalEl + " ----------" + fvotedEl);
+
     await getSigningRoom();
-    votedEl.textContent = signed_count.toString();
-    totalEl.textContent = participants_count.toString();
-    if (enough_participants){
+    console.log(ftotalEl + " ----------" + fvotedEl);
+
+    if (votedEl !== null && totalEl !== null) {
+        votedEl.textContent = signed_count.toString();
+        totalEl.textContent = participants_count.toString();
+        // if (enough_participants) {
+        //     window.location = "http://localhost:63342/kuriskachut/pages/signing_5_download.html?_ijt=f7pp3sngvv9jbmn7c7b6cfusbe&_ij_reload=RELOAD_ON_SAVE";
+        // }
+    }
+    if (xvotedEl !== null && xtotalEl !== null) {
+        xvotedEl.textContent = signed_count.toString();
+        xtotalEl.textContent = participants_count.toString();
+        // if (enough_participants) {
+        //     window.location = "http://localhost:63342/kuriskachut/pages/signing_5_download.html?_ijt=f7pp3sngvv9jbmn7c7b6cfusbe&_ij_reload=RELOAD_ON_SAVE";
+        // }
+    }
+    console.log(ftotalEl + " ----------" + fvotedEl);
+    if (fvotedEl !== null && ftotalEl !== null ) {
+        fvotedEl.textContent = signed_count.toString();
+        ftotalEl.textContent = participants_count.toString();
+        if (enough_participants) {
+            window.location = ("http://localhost:63342/kuriskachut/pages/signing_5_download.html?room_id=" + sign_room_id);
+        }
+        // if (enough_participants) {
+        // }
+    }
+    // if (xvotedEl !== null)
+    //     xvotedEl.textContent = signed_count.toString();
+    // if (xtotalEl !== null)
+    //     xtotalEl.textContent = participants_count.toString();
+    if (enough_participants && stopBttn !== null) {
         stopBttn.style.visibility = "visible";
+    }
+    if (enough_participants && stopBttn2 !== null) {
+        stopBttn2.style.visibility = "visible";
     }
     console.log("rrrrrrrrrr");
     //
     // votedEl.textContent = ++votedEl.textContent;
     //
-    // if (votedEl.textContent >= requiredEl.textContent) {
-    //     window.location = "http://localhost:63342/kuriskachut/pages/signing_5_download.html?_ijt=f7pp3sngvv9jbmn7c7b6cfusbe&_ij_reload=RELOAD_ON_SAVE";
-    // }
+}
+
+function uploadRoomId() {
+    room_id = localStorage['room_id'];
+}
+
+function goToEditRoom() {
+    window.location = "pages/editing_1_initiation.html?room_id=" + room_id;
 }

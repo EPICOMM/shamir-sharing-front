@@ -12,7 +12,7 @@ async function createSecretRoom() {
         },
         body: JSON.stringify({
             "type": "threshold",
-            "threshold": 2,
+            "threshold": numToAccess,
             "names": participants
             // "names": JSON.stringify(participants)
         })
@@ -29,7 +29,8 @@ async function createSecretRoom() {
 
 async function getSecretRoom() {
     room_id = localStorage.getItem("room_id");
-
+    creator_token = localStorage.getItem("creator_token");
+    console.log("AAAAAAA getSecretRoom " + creator_token);
     const rawResponse = await fetch('http://localhost:8080/getSecretRoom?room_id=' + room_id, {
         method: 'GET'
     })
@@ -90,6 +91,8 @@ async function createSigningRoom() {
     sign_room_id = ans["room_id"];
     creator_token = ans["creator_token"];
     localStorage.setItem('sign_room_id', sign_room_id);
+    localStorage.setItem('creator_token', creator_token);
+
 }
 
 async function getSigningRoom() {
@@ -148,7 +151,7 @@ async function downloadOriginalDocument() {
 async function signDocument() {
     console.log("!!!!");
 
-    const rawResponse = await fetch('http://localhost:8080/signDocument?room_id='+"JtV-CKQ-kGH-ynq", {
+    const rawResponse = await fetch('http://localhost:8080/signDocument?room_id='+sign_room_id, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/octet-stream'
@@ -167,14 +170,18 @@ async function signDocument() {
 }
 
 async function finishSigning() {
-
+    const queryString = window.location.search;
+    console.log(queryString);
+    const urlParams = new URLSearchParams(queryString);
+    creator_token = urlParams.get('creator_token');
+    console.log(creator_token);
     console.log("!!!!");
 
-    const rawResponse = await fetch('http://localhost:8080/finishSigning?room_id=JtV-CKQ-kGH-ynq&creator_token=EXt-Jye-Ahb-HjU', {
+    const rawResponse = await fetch('http://localhost:8080/finishSigning?room_id='+sign_room_id+"&creator_token="+ creator_token, {
         method: 'POST'
     })
-
-    console.log(await rawResponse);
+    let ans = await rawResponse;
+    console.log("await rawResponse" + ans);
     // Завершение подписывания документа
     // Метод запроса: POST
     // Параметры: room_id (строка, возвращается при создании комнаты),
@@ -183,7 +190,22 @@ async function finishSigning() {
     // Ответ: pdf-файл, если подписание прошло успешно
 }
 
-function downloadSignedDocument(room_id) {
+function downloadSignedDocument() {
+    const queryString = window.location.search;
+    console.log(queryString);
+    const urlParams = new URLSearchParams(queryString);
+    sign_room_id = urlParams.get('room_id');
+    console.log(sign_room_id);
+    console.log("aADSDSF"+sign_room_id);
+    var link = document.createElement('a');
+    link.setAttribute('href', 'http://localhost:8080/downloadSignedDocument/' + sign_room_id);
+    link.setAttribute('download', "original-doc.pdf");
+    link.setAttribute('target','_blank');
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
     // Скачивание подписанного документа
     // Метод запроса: GET
     // Параметры (в пути url): room_id (строка, выдается при создании комнаты)
@@ -192,7 +214,37 @@ function downloadSignedDocument(room_id) {
     // 3) Изменение структуры доступа
 }
 
-function createSecretReissueRoom(file) {
+async function createSecretReissueRoom() {
+
+    const formData = new FormData();
+    formData.append('pdf1', sssFile);
+
+    // const rawResponse = await fetch('http://localhost:8080/createSecretRoom', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+    //         "type": "threshold",
+    //         "threshold": 2,
+    //         "names": participants
+    //         // "names": JSON.stringify(participants)
+    //     })
+    // })
+
+    const rawResponse = await fetch('http://localhost:8080/createSecretReissueRoom?formula=T2(a,b,c,d,e,f,g)', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/octet-stream'
+        },
+        body: sssFile
+    })
+
+    let ans = await rawResponse.json();
+    console.log(ans);
+    editing_room_id = ans["editing_room_id"];
+    localStorage.setItem('editing_room_id', editing_room_id);
+
     // Создание комнаты изменения изменения структуры разделения секрета
     // Метод запроса: POST
     // Параметры запроса: formula(строка, задающая новую формулу)
@@ -203,7 +255,26 @@ function createSecretReissueRoom(file) {
     // Возможные типы ошибок: FORMULA_ERROR, NAMES_ERROR
 }
 
-function getSecretReissueRoom(room_id) {
+async function getSecretReissueRoom(room_id) {
+    editing_room_id = localStorage.getItem("editing_room_id");
+    console.log("AAAAAAA getSecretRoom " + editing_room_id);
+
+    const rawResponse = await fetch('http://localhost:8080/getSecretReissueRoom?room_id=' + editing_room_id, {
+        method: 'GET'
+    })
+
+    let ans = await rawResponse.json();
+
+    console.log(ans["links"].toString());
+    let obj = ans["links"];
+    links = {};
+    for (const [key, value] of Object.entries(obj)) {
+        links[`'${key}'`] = `${value}`;
+    }
+    console.log(links);
+    signed_count = ans["signed_count"];
+    participants_count = ans["participants_count"];
+    room_status = ans["room_status"];
     // Получение информации о комнате изменения структуры разделения секрета
     // Метод запроса: GET
     // Параметры: room_id (строка – идентификатор комнаты, полученный в
@@ -231,7 +302,6 @@ function downloadReissuedSecretShare(room_id, user_id) {
 }
 //pdf, public_key
 async function verifySignature() {
-
     const formData = new FormData();
     formData.append('pdf1', pdfFile);
     formData.append('pdf2', rpkFile);

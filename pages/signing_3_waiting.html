@@ -16,7 +16,7 @@
     <script defer src="https://unpkg.com/swup@3"></script>
     <!--    <link rel="stylesheet" href="/../../assets/vendor/bootstrap-tagsinput/css/bootstrap-tagsinput.css">-->
 
-<body>
+<body onload="getSigningRoom(); updateStatistics()">
 <div style="text-align: center; margin-bottom: 50px; margin-top: 350px; position: center;">
     <img  id="logo-trans" src="/pictures/logo-transformed.png">
     <img  id="logo" src="/pictures/logo.png">
@@ -30,9 +30,9 @@
     <p class="scoreboard-title"></p>
     <p class="scoreboard-title">Total</p>
     <br>
-    <div id="voted" type="button" class="btn btn-lg scoreboard"></div>
-    <a id="required" type="button" class="btn btn-lg scoreboard"></a>
-    <a id="total" type="button" class="btn btn-lg scoreboard"></a>
+    <div id="voted-f" type="button" class="btn btn-lg scoreboard"></div>
+    <a id="required-f" type="button" class="btn btn-lg scoreboard"></a>
+    <a id="total-f" type="button" class="btn btn-lg scoreboard"></a>
 
     <a id="button-1-1" type="button" class="btn btn-lg" onclick="updateStatistics()">Update</a>
 

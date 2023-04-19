@@ -27,25 +27,19 @@
 <form  style="text-align: center; position: center" >
 
     <p class="scoreboard-title">Voted</p>
-    <p class="scoreboard-title">Required</p>
+    <p class="scoreboard-title"></p>
     <p class="scoreboard-title">Total</p>
     <br>
-    <div type="button" class="btn btn-lg scoreboard">1</div>
-    <a type="button" class="btn btn-lg scoreboard">7</a>
-    <a type="button" class="btn btn-lg scoreboard">9</a>
+    <div id="voted-x" type="button" class="btn btn-lg scoreboard"></div>
+    <a id="required-x" type="button" class="btn btn-lg scoreboard"></a>
+    <a id="total-x" type="button" class="btn btn-lg scoreboard"></a>
 
     <a type="button" class="btn btn-lg" onclick="copySigningRoomLink(true)">Copy signing room link</a>
-
-    <div style="height:120px; "
-         ondrop="dropHandler(event);"
-         class="dndField"
-         ondragover="dragOverHandler(event);">
-        <img src="/pictures/upload-creator-token.png" style="width: 100px; margin-top: 20px">
-    </div>
-
-    <a id="stop-button" type="button" class="btn btn-lg" onclick="stopSignification()">Stop</a>
+    <a id="update-button" type="button" class="btn btn-lg" onclick="updateStatistics()">Update</a>
+    <a id="stop-button-2" type="button" class="btn btn-lg"  style="visibility: hidden" onclick="updateAndStop()">Stop</a>
 
 </form>
+<script src="/behaviour/serverRequests.js"></script>
 
 <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
 <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>

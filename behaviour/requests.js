@@ -3,36 +3,36 @@ verdict = document.getElementById("verdict");
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
-
-function verifySignature() {
-    if (rpkFile === null) {
-        showNewTipContent('Загрузите rpk-файл')
-        return 0;
-    }
-
-    if (pdfFile === null) {
-        showNewTipContent('Загрузите pdf-файл');
-        return 0;
-    }
-
-    var data = {name: "john"};
-    var url = 'localhost:8080/verifySignature';
-
-    $http.post(url, data).then(function (response) {
-        if (response.data) {
-            console.log("success");
-        } else {
-            console.log("failure");
-        }
-    });
-
-    if (getRandomInt(2) % 2 === 0) {
-        ans = "OK";
-    } else {
-        ans = "WRONG";
-    }
-    illustrateVerdict(ans);
-}
+//
+// function verifySignature() {
+//     if (rpkFile === null) {
+//         showNewTipContent('Загрузите rpk-файл')
+//         return 0;
+//     }
+//
+//     if (pdfFile === null) {
+//         showNewTipContent('Загрузите pdf-файл');
+//         return 0;
+//     }
+//
+//     var data = {name: "john"};
+//     var url = 'localhost:8080/verifySignature';
+//
+//     $http.post(url, data).then(function (response) {
+//         if (response.data) {
+//             console.log("success");
+//         } else {
+//             console.log("failure");
+//         }
+//     });
+//
+//     if (getRandomInt(2) % 2 === 0) {
+//         ans = "OK";
+//     } else {
+//         ans = "WRONG";
+//     }
+//     illustrateVerdict(ans);
+// }
 
 function illustrateVerdict(ans) {
     verdict.style.visibility = "visible";

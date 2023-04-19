@@ -15,7 +15,7 @@
     <script type="text/javascript" src="https://res.cloudinary.com/veseylab/raw/upload/v1636192990/magicmouse/magic_mouse-1.2.1.cdn.min.js"></script>
 </head>
 
-<body>
+<body onload="uploadRoomId()">
     <div style="text-align: center; margin-bottom: 50px; margin-top: 350px; position: center">
         <img  id="logo-trans" src="pictures/logo-transformed.png">
         <img  id="logo" src="pictures/logo.png">
@@ -26,42 +26,44 @@
 <!--        <button type="button" class="btn btn-lg" onclick="document.location='pages/creation_1_scheme_creation.html'">Создать</button>-->
         <a type="button" class="btn btn-lg magic-hover magic-hover__square " href="pages/creation_1_scheme_creation.html">
             Создать схему</a>
-        <a type="button" class="btn btn-lg" href="pages/signing_1_initiation.html?_ijt=haaptm1vmkmpqm2btvkdlq7a1p&_ij_reload=RELOAD_ON_SAVE">
+        <a type="button" class="btn btn-lg" href="pages/signing_1_initiation.html">
             Подписать документ</a>
-        <a type="button" class="btn btn-lg" href="http://localhost:63342/kuriskachut/pages/editing_1_initiation.html?_ijt=haaptm1vmkmpqm2btvkdlq7a1p&_ij_reload=RELOAD_ON_SAVE">
+        <a type="button" class="btn btn-lg" onclick="goToEditRoom()">
             Редактировать схему</a>
-        <a type="button" class="btn btn-lg" href="http://localhost:63342/kuriskachut/pages/checking.html?_ijt=haaptm1vmkmpqm2btvkdlq7a1p&_ij_reload=RELOAD_ON_SAVE">
+        <a type="button" class="btn btn-lg" href="pages/checking.html">
             Проверить подпись</a>
 
 
-        <a type="button" class="btn btn-lg" onclick="downloadPublicKey()">downloadPublicKey</a>
-        <a type="button" class="btn btn-lg" onclick="downloadSecretShare()">downloadSecretShare</a>
+<!--        <a type="button" class="btn btn-lg" onclick="downloadPublicKey()">downloadPublicKey</a>-->
+<!--        <a type="button" class="btn btn-lg" onclick="downloadSecretShare()">downloadSecretShare</a>-->
 
-        <div
-                ondrop="dropHandler(event);"
-                class="dndField"
-                ondragover="dragOverHandler(event);">
-            <img src="/pictures/upload_pdf_rpk.png" style="width: 150px; margin-top: 85px">
-        </div>
+<!--        <div-->
+<!--                ondrop="dropHandler(event);"-->
+<!--                class="dndField"-->
+<!--                ondragover="dragOverHandler(event);">-->
+<!--            <img src="/pictures/upload_pdf_rpk.png" style="width: 150px; margin-top: 85px">-->
+<!--        </div>-->
 
-        <a type="button" class="btn btn-lg" onclick="createSigningRoom()">createSigningRoom</a>
-        <a type="button" class="btn btn-lg" onclick="getSigningRoom()">getSigningRoom</a>
-        <a type="button" class="btn btn-lg" onclick="downloadOriginalDocument()">downloadOriginalDocument</a>
-        <a type="button" class="btn btn-lg" onclick="signDocument()">signDocument</a>
-        <a type="button" class="btn btn-lg" onclick="finishSigning()">finishSigning</a>
-        <a type="button" class="btn btn-lg" onclick="downloadSignedDocument()">downloadSignedDocument</a>
-        <a type="button" class="btn btn-lg" onclick="createSecretReissueRoom()">createSecretReissueRoom</a>
-        <a type="button" class="btn btn-lg" onclick="getSecretReissueRoom()">getSecretReissueRoom</a>
-        <a type="button" class="btn btn-lg" onclick=""></a>
-        <a type="button" class="btn btn-lg" onclick=""></a>
-        <a type="button" class="btn btn-lg" onclick=""></a>
-        <a type="button" class="btn btn-lg" onclick=""></a>
+<!--        <a type="button" class="btn btn-lg" onclick="createSigningRoom()">createSigningRoom</a>-->
+<!--        <a type="button" class="btn btn-lg" onclick="getSigningRoom()">getSigningRoom</a>-->
+<!--        <a type="button" class="btn btn-lg" onclick="downloadOriginalDocument()">downloadOriginalDocument</a>-->
+<!--        <a type="button" class="btn btn-lg" onclick="signDocument()">signDocument</a>-->
+<!--        <a type="button" class="btn btn-lg" onclick="finishSigning()">finishSigning</a>-->
+<!--        <a type="button" class="btn btn-lg" onclick="downloadSignedDocument()">downloadSignedDocument</a>-->
+<!--        <a type="button" class="btn btn-lg" onclick="createSecretReissueRoom()">createSecretReissueRoom</a>-->
+<!--        <a type="button" class="btn btn-lg" onclick="getSecretReissueRoom()">getSecretReissueRoom</a>-->
+<!--        <a type="button" class="btn btn-lg" onclick=""></a>-->
+<!--        <a type="button" class="btn btn-lg" onclick=""></a>-->
+<!--        <a type="button" class="btn btn-lg" onclick=""></a>-->
+<!--        <a type="button" class="btn btn-lg" onclick=""></a>-->
 
         <!--        <a type="button" class="btn btn-lg btn-cross" href="/index.html"></a>-->
     </form>
 
 
     <script src="behaviour/serverRequests.js"></script>
+    <script src="behaviour/elementsBehaviour.js"></script>
+
     <script src="behaviour/requests.js"></script>
 <!--    <script src="behaviour/dnd.js"></script>-->
 
